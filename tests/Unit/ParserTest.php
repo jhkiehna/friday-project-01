@@ -16,9 +16,19 @@ class ParserTest extends TestCase
         $this->file = file_get_contents('test-fixture.txt', FILE_USE_INCLUDE_PATH);
     }
 
+    public function testParserCanParseTheFile()
+    {
+        $parser = new Parser($this->file);
+        $parser->parseFile();
+
+        $this->assertEquals($parser->paragraphs->count(), 20);
+        $this->assertEquals($parser->sentences->count(), 235);
+    }
+
     public function testParserCanFindShortestParagraph()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
 
         $result = $parser->shortest();
 
@@ -28,6 +38,7 @@ class ParserTest extends TestCase
     public function testParserCanFindLongestParagraph()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
 
         $result = $parser->longest();
 
@@ -37,15 +48,17 @@ class ParserTest extends TestCase
     public function testParserCanFindTotalNumberOfCharacters()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
 
         $result = $parser->totalCharacters();
 
-        $this->assertEquals($result, 12645);
+        $this->assertEquals($result, 12606);
     }
 
     public function testParserCanFindTotalNumberOfSentences()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
 
         $result = $parser->totalSentences();
 
@@ -55,6 +68,7 @@ class ParserTest extends TestCase
     public function testParserCanFindTotalNumberOfParagraphs()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
 
         $result = $parser->totalParagraphs();
 
@@ -64,6 +78,7 @@ class ParserTest extends TestCase
     public function testParserCanFindAverageNumberOfCharactersPerParagraph()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
 
         $result = $parser->averageCharacters();
 
@@ -73,6 +88,7 @@ class ParserTest extends TestCase
     public function testParserCanFindAverageNumberOfSentencesPerParagraph()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
 
         $result = $parser->averageSentences();
 
@@ -82,6 +98,7 @@ class ParserTest extends TestCase
     public function testParserCanReturnAListOfOverusedWordsAndTimesUsed()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
         $words = [];
         $timesUsed = 0;
 
@@ -93,6 +110,7 @@ class ParserTest extends TestCase
     public function testParserCanReturnAListOfOverusedPhrasesAndTimesUsed()
     {
         $parser = new Parser($this->file);
+        $parser->parseFile();
         $phrases = [];
         $timesUsed = 0;
 
@@ -103,6 +121,8 @@ class ParserTest extends TestCase
 
     public function testParserCanReturnAListOfAlternativesForAnOverusedWord()
     {
+        $parser = new Parser($this->file);
+        $parser->parseFile();
         $alternatives = [];
 
         $result = $parser->wordAlternatives('test');
@@ -112,6 +132,8 @@ class ParserTest extends TestCase
 
     public function testParserCanReturnAListOfAlternativesForAnOverusedPhrase()
     {
+        $parser = new Parser($this->file);
+        $parser->parseFile();
         $alternatives = [];
 
         $result = $parser->phraseAlternatives('test placeholder phrase');
@@ -121,6 +143,8 @@ class ParserTest extends TestCase
 
     public function testParserCanReturnAListOfSpellingErrors()
     {
+        $parser = new Parser($this->file);
+        $parser->parseFile();
         $errors = [];
 
         $result = $parser->spellingErrors();
@@ -130,6 +154,8 @@ class ParserTest extends TestCase
 
     public function testParserCanReturnAListOfGrammarErrors()
     {
+        $parser = new Parser($this->file);
+        $parser->parseFile();
         $errors = [];
 
         $result = $parser->grammarErrors();
