@@ -57,14 +57,20 @@ class ParserTest extends TestCase
         $this->assertEquals($result, 12606);
     }
 
+    public function testParserCanFindTotalNumberOfWords()
+    {
+        $parser = new Parser($this->file);
+        $parser->parseFile();
+
+        $this->assertEquals($parser->totalWords(), 1877);
+    }
+
     public function testParserCanFindTotalNumberOfSentences()
     {
         $parser = new Parser($this->file);
         $parser->parseFile();
 
-        $result = $parser->totalSentences();
-
-        $this->assertEquals($result, 0);
+        $this->assertEquals($parser->totalSentences(), 235);
     }
 
     public function testParserCanFindTotalNumberOfParagraphs()
@@ -72,9 +78,7 @@ class ParserTest extends TestCase
         $parser = new Parser($this->file);
         $parser->parseFile();
 
-        $result = $parser->totalParagraphs();
-
-        $this->assertEquals($result, 20);
+        $this->assertEquals($parser->totalParagraphs(), 20);
     }
 
     public function testParserCanFindAverageNumberOfCharactersPerParagraph()

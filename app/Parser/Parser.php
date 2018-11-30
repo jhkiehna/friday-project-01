@@ -67,6 +67,21 @@ class Parser extends Model
         });
     }
 
+    public function totalWords()
+    {
+        return $this->words->count();
+    }
+
+    public function totalSentences()
+    {
+        return $this->sentences->count();
+    }
+
+    public function totalParagraphs()
+    {
+        return $this->paragraphs->count();
+    }
+
     public function shortestParagraph()
     {
         //This will only return one paragraph. What to do in case of tie?
@@ -90,6 +105,7 @@ class Parser extends Model
 
     public function longestParagraph()
     {
+        //This will only return one paragraph. What to do in case of tie?
         $longestParagraph = $this->paragraphs->reduce(function ($longestParagraph, $currentParagraph) {
             if($longestParagraph == null) {
                 return $currentParagraph;
