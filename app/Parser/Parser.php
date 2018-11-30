@@ -67,8 +67,29 @@ class Parser extends Model
         });
     }
 
-    public function shortest()
+    public function shortestParagraph()
     {
-        
+        //This will only return one paragraph. What to do in case of tie?
+        $shortestParagraph = $this->paragraphs->reduce(function ($shortestParagraph, $currentParagraph) {
+            if($shortestParagraph == null) {
+                return $currentParagraph;
+            }
+
+            if (strlen($currentParagraph) <= strlen($shortestParagraph)) {
+                return $currentParagraph;
+            }
+
+            return $shortestParagraph;
+        });
+
+        return [
+            'paragraph' => $shortestParagraph,
+            'length' => strlen($shortestParagraph)
+        ];
+    }
+
+    public function longestParagraph()
+    {
+        return [];
     }
 }

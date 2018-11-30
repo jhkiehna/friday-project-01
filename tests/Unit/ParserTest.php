@@ -29,10 +29,11 @@ class ParserTest extends TestCase
     {
         $parser = new Parser($this->file);
         $parser->parseFile();
+        $shortestParagraph = 'Maecenas et augue urna. Etiam eu tincidunt odio. Cras interdum sapien nec erat elementum, at facilisis neque molestie. Duis at libero quis erat posuere vulputate. Integer lobortis congue vehicula. Nullam auctor, ligula sit amet pretium blandit, enim neque feugiat dolor, eget tempor ante nisi eu sem. Sed ex arcu, accumsan a mattis vitae, consectetur sed eros.';
 
-        $result = $parser->shortest();
+        $result = $parser->shortestParagraph();
 
-        $this->assertEquals($result, 15);
+        $this->assertEquals($result, ['paragraph' => $shortestParagraph, 'length' => 360]);
     }
 
     public function testParserCanFindLongestParagraph()
@@ -40,7 +41,7 @@ class ParserTest extends TestCase
         $parser = new Parser($this->file);
         $parser->parseFile();
 
-        $result = $parser->longest();
+        $result = $parser->longestParagraph();
 
         $this->assertEquals($result, 10);
     }
