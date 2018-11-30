@@ -90,6 +90,21 @@ class Parser extends Model
 
     public function longestParagraph()
     {
-        return [];
+        $longestParagraph = $this->paragraphs->reduce(function ($longestParagraph, $currentParagraph) {
+            if($longestParagraph == null) {
+                return $currentParagraph;
+            }
+
+            if (strlen($currentParagraph) >= strlen($longestParagraph)) {
+                return $currentParagraph;
+            }
+
+            return $longestParagraph;
+        });
+
+        return [
+            'paragraph' => $longestParagraph,
+            'length' => strlen($longestParagraph)
+        ];
     }
 }
