@@ -86,9 +86,19 @@ class ParserTest extends TestCase
         $parser = new Parser($this->file);
         $parser->parseFile();
 
-        $result = $parser->averageCharacters();
+        $result = $parser->averageCharactersPerParagraph();
 
-        $this->assertEquals($result, 0);
+        $this->assertEquals($result, 630.3);
+    }
+
+    public function testParserCanFindAverageNumberOfWordsPerParagraph()
+    {
+        $parser = new Parser($this->file);
+        $parser->parseFile();
+
+        $result = $parser->averageWordsPerParagraph();
+
+        $this->assertEquals($result, 93.85);
     }
 
     public function testParserCanFindAverageNumberOfSentencesPerParagraph()
@@ -96,9 +106,9 @@ class ParserTest extends TestCase
         $parser = new Parser($this->file);
         $parser->parseFile();
 
-        $result = $parser->averageSentences();
+        $result = $parser->averageSentencesPerParagraph();
 
-        $this->assertEquals($result, 0);
+        $this->assertEquals($result, 11.75);
     }
 
     public function testParserCanReturnAListOfOverusedWordsAndTimesUsed()

@@ -82,6 +82,43 @@ class Parser extends Model
         return $this->paragraphs->count();
     }
 
+    public function averageCharactersPerParagraph()
+    {
+        $totalCharacters = $this->paragraphs->reduce(function ($characterCount, $paragraph) {
+            return $characterCount + strlen($paragraph);
+        });
+
+        return number_format($totalCharacters / $this->paragraphs->count(), 2);
+    }
+
+    public function averageWordsPerParagraph()
+    {
+        $totalWords = $this->paragraphs->flatMap(function ($paragraph) {
+            $words = collect(preg_split("/\W/", $paragraph))
+                ->filter(function ($word) {
+                    return empty(!$word);
+                })->values();
+
+            return $words;
+        });
+
+        return number_format($totalWords->count() / $this->paragraphs->count(), 2);
+    }
+
+    public function averageSentencesPerParagraph()
+    {
+        $totalSentences = $this->paragraphs->flatMap(function ($paragraph) {
+            $sentences = collect(preg_split("/[.!?]+[\s]/", $paragraph))
+                ->filter(function ($sentence) {
+                    return empty(!$sentence);
+                })->values();
+
+            return $sentences;
+        });
+
+        return number_format($totalSentences->count() / $this->paragraphs->count(), 2);
+    }
+
     public function shortestParagraph()
     {
         //This will only return one paragraph. What to do in case of tie?
