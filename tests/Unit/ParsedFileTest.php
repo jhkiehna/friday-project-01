@@ -4,85 +4,83 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Parser\Parser;
+use App\ParsedFile;
 
-class ParserTest extends TestCase
+class ParsedFileTest extends TestCase
 {
     public $parsedFile;
 
     public function SetUp()
     {
         $path = realpath(__DIR__.'/test-fixture.txt');
-        $parser = new Parser($path);
-        $this->parsedFile = $parser->parseFile($path);
+        $this->parsedFile = new ParsedFile($path);
     }
 
-    public function testParserCanParseTheFile()
+    public function testParsedFileHasContent()
     {
-        $this->assertEquals($this->parsedFile->paragraphs->count(), 20);
-        $this->assertEquals($this->parsedFile->sentences->count(), 235);
+        $contents = file_get_contents('test-fixture.txt', FILE_USE_INCLUDE_PATH);
+
+        $this->assertEquals($this->parsedFile->getContent(), $contents);
     }
 
-    public function testParserCanFindShortestParagraph()
+    public function testParsedFileCanFindItsTotalNumberOfParagraphs()
+    {
+        $this->assertEquals($this->parsedFile->getParagraphCount(), 20);
+    }
+
+    public function testParsedFileCanFindItsShortestParagraph()
     {
         $shortestParagraph = 'Maecenas et augue urna. Etiam eu tincidunt odio. Cras interdum sapien nec erat elementum, at facilisis neque molestie. Duis at libero quis erat posuere vulputate. Integer lobortis congue vehicula. Nullam auctor, ligula sit amet pretium blandit, enim neque feugiat dolor, eget tempor ante nisi eu sem. Sed ex arcu, accumsan a mattis vitae, consectetur sed eros.';
 
-        $result = $this->parsedFile->shortestParagraph();
-
-        $this->assertEquals($result, ['paragraph' => $shortestParagraph, 'length' => 360]);
+        $this->assertEquals($this->parsedFile->getShortestParagraph(), $shortestParagraph);
+        $this->assertEquals(strlen($this->parsedFile->getShortestParagraph()), 360);
     }
 
-    public function testParserCanFindLongestParagraph()
+    public function testParsedFileCanFinditsLongestParagraph()
     {
         $longestParagraph = 'Nam justo neque, condimentum sit amet vulputate ut, semper molestie metus. Cras vel metus sollicitudin, ullamcorper orci at, scelerisque urna. Curabitur orci massa, facilisis a ipsum convallis, tincidunt convallis tortor. Quisque ornare congue ex, eu feugiat enim efficitur nec. Duis id est luctus, mattis metus eu, semper mauris. Donec volutpat lacinia turpis, sit amet commodo urna pharetra vel. Nulla auctor risus non neque accumsan, sit amet commodo lectus vulputate. Sed malesuada et ante nec commodo. Nunc volutpat leo feugiat, placerat risus eu, porta dolor. Aliquam venenatis maximus suscipit. Aenean eu metus elementum, tempus felis vel, mollis lorem. Donec bibendum dui mauris, vel congue nisi elementum eget. Proin porta consectetur ligula, ut ultrices risus laoreet non. Morbi sit amet odio ac sapien gravida tincidunt non eu lectus. Nullam at odio at quam gravida vestibulum. Aliquam nisi mi, iaculis ac neque ac, varius egestas turpis.';
 
-        $result = $this->parsedFile->longestParagraph();
-
-        $this->assertEquals($result, ['paragraph' => $longestParagraph, 'length' => 949]);
+        $this->assertEquals($this->parsedFile->getLongestParagraph(), $longestParagraph);
+        $this->assertEquals(strlen($this->parsedFile->getLongestParagraph()), 949);
     }
 
-    public function testParserCanFindTotalNumberOfCharacters()
+    public function testParsedFileCanFindItsTotalNumberOfSentences()
     {
-        $result = $this->parsedFile->totalCharacters();
-
-        $this->assertEquals($result, 12606);
+        $this->assertEquals($this->parsedFile->getSentenceCount(), 235);
     }
 
-    public function testParserCanFindTotalNumberOfWords()
+    public function testParsedFileCanFindItsTotalNumberOfWords()
     {
-        $this->assertEquals($this->parsedFile->totalWords(), 1877);
+        $this->assertEquals($this->parsedFile->getWordCount(), 1877);
     }
 
-    public function testParserCanFindTotalNumberOfSentences()
+    public function testParsedFileCanFindItsTotalNumberOfCharacters()
     {
-        $this->assertEquals($this->parsedFile->totalSentences(), 235);
+        $this->assertEquals($this->parsedFile->getCharacterCount(), 12606);
     }
 
-    public function testParserCanFindTotalNumberOfParagraphs()
+    public function testParsedFileCanFindItsAvgNumberOfCharactersPerParagraph()
     {
-        $this->assertEquals($this->parsedFile->totalParagraphs(), 20);
+        $this->assertEquals($this->parsedFile->getAverageCharactersPerParagraph(), 630.30);
     }
 
-    public function testParserCanFindAverageNumberOfCharactersPerParagraph()
+    public function testParsedFileCanFindItsAvgNumberOfSentencesPerParagraph()
     {
-        $result = $this->parsedFile->averageCharactersPerParagraph();
-
-        $this->assertEquals($result, 630.3);
+        $this->assertEquals($this->parsedFile->getAverageSentencesPerParagraph(), 11.75);
     }
 
-    public function testParserCanFindAverageNumberOfWordsPerParagraph()
+    public function testParsedFileCanFindItsAvgNumberOfWordsPerParagraph()
     {
-        $result = $this->parsedFile->averageWordsPerParagraph();
-
-        $this->assertEquals($result, 93.85);
+        $this->assertEquals($this->parsedFile->getAverageWordsPerParagraph(), 93.85);
     }
 
-    public function testParserCanFindAverageNumberOfSentencesPerParagraph()
+    public function testParsedFileCanFindItsAvgNumberOfWordsPerSentence()
     {
-        $result = $this->parsedFile->averageSentencesPerParagraph();
-
-        $this->assertEquals($result, 11.75);
+        $this->assertEquals($this->parsedFile->getAverageWordsPerSentence(), 7.99);
     }
+
+
+
 
     public function testParserCanReturnAListOfOverusedWordsAndTimesUsed()
     {
