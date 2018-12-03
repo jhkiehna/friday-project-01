@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Report;
 
 class ParseTextFileCommand extends Command
 {
@@ -13,6 +14,7 @@ class ParseTextFileCommand extends Command
      */
     protected $signature = 'parse:file {filePath}';
     protected $filePath;
+    protected $report;
 
     /**
      * The console command description.
@@ -26,9 +28,11 @@ class ParseTextFileCommand extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Report $report)
     {
         parent::__construct();
+
+        $this->report = $report;
     }
 
     /**
@@ -38,9 +42,22 @@ class ParseTextFileCommand extends Command
      */
     public function handle()
     {
-        //Call parser class
+        $this->setPath();
         
-        $this->line($this->argument('filePath'));
+        $this->line($this->filePath);
         $this->line('Complete');
+    }
+
+    public function setPath(){
+        //Should probably find out how to reference the app root directory, re '/../../../'
+        $this->filePath = realpath(__DIR__ . '/../../../' . $this->argument('filePath'));
+
+        if (empty($this->filePath)) {
+            $this->line('Invalid path: ' . $this->argument('filePath'));
+            $this->line('No file exists at this location');
+            return false;
+        }
+
+        return true;
     }
 }
