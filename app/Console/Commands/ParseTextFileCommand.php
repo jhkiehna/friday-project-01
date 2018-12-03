@@ -41,7 +41,10 @@ class ParseTextFileCommand extends Command
      */
     public function handle()
     {
-        $this->setPath();
+        if (!$this->setPath()) {
+            return;
+        };
+
         $this->line('Opening file at: ' . $this->filePath);
 
         $reportPath = $this->generateReport();
@@ -53,7 +56,7 @@ class ParseTextFileCommand extends Command
         //Should probably find out how to reference the app root directory, re '/../../../'
         $this->filePath = realpath(__DIR__ . '/../../../' . $this->argument('filePath'));
 
-        if (empty($this->filePath)) {
+        if (empty($this->filePath) || $this->filePath == false) {
             $this->line('Invalid path: ' . $this->argument('filePath'));
             $this->line('No file exists at this location');
             return false;
