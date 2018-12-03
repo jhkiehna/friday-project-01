@@ -12,13 +12,13 @@ class DocumentTest extends TestCase
 
     public function SetUp()
     {
-        $path = realpath(__DIR__.'/test-fixture.txt');
+        $path = realpath(__DIR__. '/../test-fixture.txt');
         $this->document = new Document($path);
     }
 
     public function testdocumentHasContent()
     {
-        $contents = file_get_contents('test-fixture.txt', FILE_USE_INCLUDE_PATH);
+        $contents = file_get_contents(__DIR__. '/../test-fixture.txt', FILE_USE_INCLUDE_PATH);
 
         $this->assertEquals($this->document->getContent(), $contents);
     }
