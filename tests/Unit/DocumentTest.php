@@ -80,9 +80,7 @@ class DocumentTest extends TestCase
     }
 
 
-
-
-    public function testParserCanReturnAListOfOverusedWordsAndTimesUsed()
+    public function testCanReturnAListOfOverusedWordsAndTimesUsed()
     {
         $words = [];
         $timesUsed = 0;
@@ -92,7 +90,7 @@ class DocumentTest extends TestCase
         $this->assertEquals($words, $result);
     }
 
-    public function testParserCanReturnAListOfOverusedPhrasesAndTimesUsed()
+    public function testDocumentCanReturnAListOfOverusedPhrasesAndTimesUsed()
     {
         $phrases = [];
         $timesUsed = 0;
@@ -102,7 +100,7 @@ class DocumentTest extends TestCase
         $this->assertEquals($phrases, $result);
     }
 
-    public function testParserCanReturnAListOfAlternativesForAnOverusedWord()
+    public function testDocumentCanReturnAListOfAlternativesForAnOverusedWord()
     {
         $alternatives = [];
 
@@ -111,7 +109,7 @@ class DocumentTest extends TestCase
         $this->assertEquals($alternatives, $result);
     }
 
-    public function testParserCanReturnAListOfAlternativesForAnOverusedPhrase()
+    public function testDocumentCanReturnAListOfAlternativesForAnOverusedPhrase()
     {
         $alternatives = [];
 
@@ -120,7 +118,7 @@ class DocumentTest extends TestCase
         $this->assertEquals($alternatives, $result);
     }
 
-    public function testParserCanReturnAListOfSpellingErrors()
+    public function testDocumentCanReturnAListOfSpellingErrors()
     {
         $errors = [];
 
@@ -129,7 +127,7 @@ class DocumentTest extends TestCase
         $this->assertEquals($errors, $result);
     }
 
-    public function testParserCanReturnAListOfGrammarErrors()
+    public function testDocumentCanReturnAListOfGrammarErrors()
     {
         $errors = [];
 
