@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Report;
+use App\Document;
+use Illuminate\Support\Facades\Storage;
 
 class ParseTextFileCommand extends Command
 {
@@ -14,7 +16,6 @@ class ParseTextFileCommand extends Command
      */
     protected $signature = 'parse:file {filePath}';
     protected $filePath;
-    protected $report;
 
     /**
      * The console command description.
@@ -28,11 +29,9 @@ class ParseTextFileCommand extends Command
      *
      * @return void
      */
-    public function __construct(Report $report)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->report = $report;
     }
 
     /**
@@ -43,9 +42,11 @@ class ParseTextFileCommand extends Command
     public function handle()
     {
         $this->setPath();
-        
-        $this->line($this->filePath);
-        $this->line('Complete');
+        $this->line('Opening file at: ' . $this->filePath);
+
+        $reportPath = $this->generateReport();
+        $this->line('Complete!');
+        $this->line('report was created at: ' . $reportPath);
     }
 
     public function setPath(){
@@ -59,5 +60,15 @@ class ParseTextFileCommand extends Command
         }
 
         return true;
+    }
+
+    public function generateReport()
+    {
+        $document = new Document($this->filePath);
+        $report = new Report($document);
+
+        Storage::disk('local')->put('report.txt', $report->generate($document));
+
+        return Storage::disk('local')->url('report.txt');
     }
 }
