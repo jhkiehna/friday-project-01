@@ -33,11 +33,6 @@ class Document extends Model
             ->values();
     }
 
-    public function getParagraphCount()
-    {
-        return $this->getParagraphs()->count();
-    }
-
     public function getShortestParagraph()
     {
         //This will only return one paragraph. What to do in case of tie?
@@ -78,11 +73,6 @@ class Document extends Model
             ->values();
     }
 
-    public function getSentenceCount()
-    {
-        return $this->getSentences()->count();
-    }
-
     public function getAverageSentencesPerParagraph()
     {
         return number_format($this->getSentenceCount() / $this->getParagraphCount(), 2);
@@ -104,11 +94,6 @@ class Document extends Model
             ->values();
     }
 
-    public function getWordCount()
-    {
-        return $this->getWords()->count();
-    }
-
     public function getAverageWordsPerParagraph()
     {
         return number_format($this->getWordCount() / $this->getParagraphCount(), 2);
@@ -123,7 +108,7 @@ class Document extends Model
      * Characters *
     **********************/
 
-    public function getCharacterCount()
+    public function countCharacters()
     {
         //instead of doing a strlen on whole file. I didn't want newline characters counted.
         return $this->getParagraphs()->reduce(function ($carryCharacters, $paragraph) {

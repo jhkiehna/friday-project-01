@@ -25,7 +25,7 @@ class DocumentTest extends TestCase
 
     public function testdocumentCanFindItsTotalNumberOfParagraphs()
     {
-        $this->assertEquals($this->document->getParagraphCount(), 20);
+        $this->assertEquals($this->document->getParagraphs()->count(), 20);
     }
 
     public function testdocumentCanFindItsShortestParagraph()
@@ -46,17 +46,17 @@ class DocumentTest extends TestCase
 
     public function testdocumentCanFindItsTotalNumberOfSentences()
     {
-        $this->assertEquals($this->document->getSentenceCount(), 235);
+        $this->assertEquals($this->document->getSentences()->count(), 235);
     }
 
     public function testdocumentCanFindItsTotalNumberOfWords()
     {
-        $this->assertEquals($this->document->getWordCount(), 1877);
+        $this->assertEquals($this->document->getWords()->count(), 1877);
     }
 
     public function testdocumentCanFindItsTotalNumberOfCharacters()
     {
-        $this->assertEquals($this->document->getCharacterCount(), 12606);
+        $this->assertEquals($this->document->countCharacters(), 12606);
     }
 
     public function testdocumentCanFindItsAvgNumberOfCharactersPerParagraph()
@@ -84,10 +84,8 @@ class DocumentTest extends TestCase
     {
         $words = [];
         $timesUsed = 0;
-
-        $result = $this->document->overusedWords();
         
-        $this->assertEquals($words, $result);
+        $this->assertEquals($words, $this->document->overusedWords());
     }
 
     public function testDocumentCanReturnAListOfOverusedPhrasesAndTimesUsed()
@@ -95,44 +93,34 @@ class DocumentTest extends TestCase
         $phrases = [];
         $timesUsed = 0;
 
-        $result = $this->document->overusedPhrases();
-
-        $this->assertEquals($phrases, $result);
+        $this->assertEquals($phrases, $this->document->overusedPhrases());
     }
 
     public function testDocumentCanReturnAListOfAlternativesForAnOverusedWord()
     {
         $alternatives = [];
 
-        $result = $this->document->wordAlternatives('test');
-
-        $this->assertEquals($alternatives, $result);
+        $this->assertEquals($alternatives, $this->document->wordAlternatives('test'));
     }
 
     public function testDocumentCanReturnAListOfAlternativesForAnOverusedPhrase()
     {
         $alternatives = [];
 
-        $result = $this->document->phraseAlternatives('test placeholder phrase');
-
-        $this->assertEquals($alternatives, $result);
+        $this->assertEquals($alternatives, $this->document->phraseAlternatives('test placeholder phrase'));
     }
 
     public function testDocumentCanReturnAListOfSpellingErrors()
     {
         $errors = [];
 
-        $result = $this->document->spellingErrors();
-
-        $this->assertEquals($errors, $result);
+        $this->assertEquals($errors, $this->document->spellingErrors());
     }
 
     public function testDocumentCanReturnAListOfGrammarErrors()
     {
         $errors = [];
 
-        $result = $this->document->grammarErrors();
-
-        $this->assertEquals($errors, $result);
+        $this->assertEquals($errors, $this->document->grammarErrors());
     }
 }
