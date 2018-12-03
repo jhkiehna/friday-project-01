@@ -75,7 +75,7 @@ class Document extends Model
 
     public function getAverageSentencesPerParagraph()
     {
-        return number_format($this->getSentenceCount() / $this->getParagraphCount(), 2);
+        return number_format($this->getSentences()->count() / $this->getParagraphs()->count(), 2);
     }
 
     /********************* 
@@ -96,12 +96,12 @@ class Document extends Model
 
     public function getAverageWordsPerParagraph()
     {
-        return number_format($this->getWordCount() / $this->getParagraphCount(), 2);
+        return number_format($this->getWords()->count() / $this->getParagraphs()->count(), 2);
     }
 
     public function getAverageWordsPerSentence()
     {
-        return number_format($this->getWordCount() / $this->getSentenceCount(), 2);
+        return number_format($this->getWords()->count() / $this->getSentences()->count(), 2);
     }
 
     /********************* 
@@ -118,6 +118,6 @@ class Document extends Model
 
     public function getAverageCharactersPerParagraph()
     {
-        return number_format($this->getCharacterCount() / $this->getParagraphCount(), 2);
+        return number_format($this->countCharacters() / $this->getParagraphs()->count(), 2);
     }
 }
