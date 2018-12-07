@@ -102,7 +102,7 @@ class StatsTest extends TestCase
         $words = [];
         $timesUsed = 0;
         
-        $this->assertEquals($words, $this->document->overusedWords());
+        $this->assertEquals($words, $this->statsObj->getWordsRanking());
     }
 
     public function testDocumentCanReturnAListOfOverusedPhrasesAndTimesUsed()
