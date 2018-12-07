@@ -130,15 +130,16 @@ class Stats
             ->reject(function($item) {
                 return $item < 20;
             })
+            ->sort()
             ->toArray();
     }
 
     public function mispellings()
     {
-        $mispellings =  $this->document->getWords()->filter(function($word) {
+        return $this->document->getWords()->filter(function($word) {
             return !pspell_check($this->dictionary, $word);
-        });
-
-        dd($mispellings);
+        })
+        ->values()
+        ->toArray();
     }
 }
