@@ -99,10 +99,13 @@ class StatsTest extends TestCase
 
     public function testCanReturnAListOfOverusedWordsAndTimesUsed()
     {
-        $words = [];
-        $timesUsed = 0;
+        $rankArray = [
+            'test' => 3,
+            'this' => 3,
+            'because' => 2
+        ];
         
-        $this->assertEquals($words, $this->statsObj->getWordsRanking());
+        $this->assertEquals($rankArray, $this->statsObj->frequentlyUsedWords());
     }
 
     public function testDocumentCanReturnAListOfOverusedPhrasesAndTimesUsed()
