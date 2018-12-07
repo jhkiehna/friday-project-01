@@ -7,6 +7,15 @@ use App\Document;
 class Stats
 {
     private $document;
+    public $ignoredWords = [
+        "i",
+        "a",
+        "to",
+        "is",
+        "the",
+        "it's",
+        "it",
+    ];
 
     public $numberParagraphs;
     public $numberSentences;
@@ -27,6 +36,8 @@ class Stats
     public $longestSentenceLength;
     public $shortestSentence;
     public $shortestSentenceLength;
+
+    public $mostUsedWords;
 
     public function __construct(Document $document)
     {
@@ -56,6 +67,8 @@ class Stats
         $this->longestSentenceLength = strlen($this->longestSentence);
         $this->shortestSentence = $this->getShortest($this->document->getSentences());
         $this->shortestSentenceLength = strlen($this->shortestSentence);
+
+        $this->mostUsedWords = $this->getMostUsedWords();
     }
 
     private function countCharacters()
@@ -105,5 +118,32 @@ class Stats
 
             return $carry;
         });
+    }
+
+    public function getMostUsedWords()
+    {
+        $filtered = $this->document->getWords()
+            ->map(function($value){
+                return strtolower($value);
+            })
+            ->sort()
+            ->reject(function($value) {
+                return collect($this->ignoredWords)->contains($value);
+            });
+        
+        $ranked = $filtered->flatMap(function($word) use ($filtered) {
+            $count = $filtered->filter(function($item) use ($word){
+                    return  $item == $word;
+                })->count();
+            return [$word => $count];
+        })
+        ->sort()
+        ->reverse()
+        ->reject(function($item) {
+            return $item < 2;
+        })
+        ->all();
+
+        return $ranked;
     }
 }
