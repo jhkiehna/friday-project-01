@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Stats;
+use TextAnalysis\Tokenizers\SentenceTokenizer;
 
 class Document
 {
@@ -58,25 +59,15 @@ class Document
 
     public function setSentences()
     {
-        $this->sentences =  $this->getParagraphs()
-            ->flatMap(function ($paragraph) {
-                return collect(preg_split("/[.!?]+[\s]/", $paragraph));
-            })
-            ->filter(function ($sentence) {
-                return empty(!$sentence);
-            })
-            ->values();
+        $sentenceTokenizer = new SentenceTokenizer();
+
+        $this->sentences = collect($sentenceTokenizer->tokenize($this->content));
     }
 
     public function setWords()
     {
-        $this->words = $this->getSentences()
-            ->flatMap(function ($sentence) {
-                return collect(preg_split("/\W/", $sentence));
-            })
-            ->filter(function ($word) {
-                return empty(!$word);
-            })
-            ->values();
+        $this->words = collect(tokenize($this->content))->map(function($word) {
+            return preg_replace("#[[:punct:]]#", "", $word);
+        });
     }
 }

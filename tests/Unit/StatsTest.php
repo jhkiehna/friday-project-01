@@ -10,12 +10,13 @@ use App\Stats;
 class StatsTest extends TestCase
 {
     public $statsObj;
+    public $document;
 
     public function SetUp()
     {
         $path = realpath(__DIR__. '/../test-fixture.txt');
-        $document = new Document($path);
-        $this->statsObj = new Stats($document);
+        $this->document = new Document($path);
+        $this->statsObj = new Stats($this->document);
     }
 
     public function testStatsCanBeInitialized()
@@ -37,6 +38,7 @@ class StatsTest extends TestCase
 
     public function testStatsCanADocumentsTotalNumberOfWords()
     {
+        dd($this->document->getWords());
         $this->assertEquals($this->statsObj->numberWords, 1877);
     }
 
