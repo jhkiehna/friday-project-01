@@ -49,7 +49,7 @@ class Report
 
         $output .= $misspellings;
 
-        $mostUsed = "Most Used Words: \n\n";
+        $mostUsed = "\nMost Used Words: \n\n";
 
         $num = $this->stats->getMostUsedWords();
 
