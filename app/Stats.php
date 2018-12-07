@@ -7,6 +7,8 @@ use App\Document;
 class Stats
 {
     private $document;
+    private $dictionary;
+
     public $ignoredWords = [
         "i",
         "a",
@@ -44,6 +46,8 @@ class Stats
         $this->document = $document;
 
         $this->initialize();
+
+        $this->dictionary = pspell_new("en");
     }
 
     private function initialize()
@@ -124,8 +128,17 @@ class Stats
     {
         return collect(freq_dist($this->document->getWords()->toArray())->getKeyValuesByFrequency())
             ->reject(function($item) {
-                return $item < $this->numberWords * 0.01;
+                return $item < 20;
             })
             ->toArray();
+    }
+
+    public function mispellings()
+    {
+        $mispellings =  $this->document->getWords()->filter(function($word) {
+            return !pspell_check($this->dictionary, $word);
+        });
+
+        dd($mispellings);
     }
 }

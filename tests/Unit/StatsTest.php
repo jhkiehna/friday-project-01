@@ -118,8 +118,6 @@ class StatsTest extends TestCase
             "non" => 21,
             "id" => 20,
             "eget" => 20,
-            "tincidunt" => 19,
-            "a" => 19,
         ];
         
         $this->assertEquals($rankArray, $this->statsObj->mostUsedWords);
@@ -151,7 +149,7 @@ class StatsTest extends TestCase
     {
         $errors = [];
 
-        $this->assertEquals($errors, $this->document->spellingErrors());
+        $this->assertEquals($errors, $this->statsObj->mispellings());
     }
 
     public function testDocumentCanReturnAListOfGrammarErrors()
