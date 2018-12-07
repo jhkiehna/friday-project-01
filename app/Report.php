@@ -24,7 +24,7 @@ class Report extends Model
 
     private function writeStats()
     {
-        return "-----\n Stats \n----" .
+        return "-----\n Stats \n-----\n" .
         "Number of Paragraphs: " .      $this->document->getParagraphs()->count() . " \n" .
         "Number of Sentences: " .       $this->document->getSentences()->count() . " \n" .
         "Number of Words: " .           $this->document->getWords()->count() . " \n" .
