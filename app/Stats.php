@@ -9,16 +9,6 @@ class Stats
     private $document;
     private $dictionary;
 
-    public $ignoredWords = [
-        "i",
-        "a",
-        "to",
-        "is",
-        "the",
-        "it's",
-        "it",
-    ];
-
     public $numberParagraphs;
     public $numberSentences;
     public $numberWords;
@@ -46,12 +36,12 @@ class Stats
         $this->document = $document;
 
         $this->initialize();
-
-        $this->dictionary = pspell_new("en");
     }
 
     private function initialize()
     {
+        $this->dictionary = pspell_new("en");
+
         $this->numberParagraphs     = $this->document->getParagraphs()->count();
         $this->numberSentences      = $this->document->getSentences()->count();
         $this->numberWords          = $this->document->getWords()->count();
