@@ -99,13 +99,18 @@ class StatsTest extends TestCase
 
     public function testCanReturnAListOfOverusedWordsAndTimesUsed()
     {
+        $path = realpath(__DIR__. '/../overused-words-fixture.txt');
+        $document = new Document($path);
+        $this->statsObj = new Stats($document);
+
         $rankArray = [
-            'test' => 3,
             'this' => 3,
-            'because' => 2
+            'test' => 3,
+            'do' => 2,
+            'because' =>2
         ];
         
-        $this->assertEquals($rankArray, $this->statsObj->frequentlyUsedWords());
+        $this->assertEquals($rankArray, $this->statsObj->mostUsedWords);
     }
 
     public function testDocumentCanReturnAListOfOverusedPhrasesAndTimesUsed()
