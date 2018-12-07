@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Stats;
+
 class Document
 {
     protected $filePath;
@@ -18,6 +20,11 @@ class Document
         $this->setParagraphs();
         $this->setSentences();
         $this->setWords();
+    }
+
+    public function getStats()
+    {
+        return new Stats($this);
     }
 
     public function getContent()

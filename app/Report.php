@@ -2,17 +2,16 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Document;
 
-class Report extends Model
+class Report
 {
-    protected $document;
+    protected $stats;
     protected $output;
 
     public function __construct(Document $document)
     {
-        $this->document = $document;
+        $this->stats = $document->getStats();
     }
 
     public function generate()
@@ -25,17 +24,19 @@ class Report extends Model
     private function writeStats()
     {
         return "-----\n Stats \n-----\n" .
-        "Number of Paragraphs: " .      $this->document->getParagraphs()->count() . " \n" .
-        "Number of Sentences: " .       $this->document->getSentences()->count() . " \n" .
-        "Number of Words: " .           $this->document->getWords()->count() . " \n" .
-        "Number of Characters: " .      $this->document->countCharacters() . " \n\n" .
+        "Number of Paragraphs: " .      $this->stats->numberParagraphs . " \n" .
+        "Number of Sentences: " .       $this->stats->numberSentences . " \n" .
+        "Number of Words: " .           $this->stats->numberWords . " \n" .
+        "Number of Characters: " .      $this->stats->numberCharacters . " \n\n" .
         
-        "Average Sentences per Paragraph: " .      $this->document->getAverageSentencesPerParagraph() . " \n" .
-        "Average Words per Paragraph: " .          $this->document->getAverageWordsPerParagraph() . " \n" .
-        "Average Words per Sentence: " .           $this->document->getAverageWordsPerSentence() . " \n" .
-        "Average Characters per Paragraph: " .     $this->document->getAverageCharactersPerParagraph() . " \n\n" .
+        "Average Sentences per Paragraph: " .      $this->stats->averageSentencesPerParagraph . " \n" .
+        "Average Words per Paragraph: " .          $this->stats->averageWordsPerParagraph. " \n" .
+        "Average Words per Sentence: " .           $this->stats->averageWordsPerSentence . " \n" .
+        "Average Characters per Paragraph: " .     $this->stats->averageCharactersPerParagraph . " \n\n" .
 
-        "Longest Paragraph: \n\n" .         $this->document->getLongestParagraph() . " \n\n" .
-        "Shortest Paragraph: \n\n" .        $this->document->getShortestParagraph() . " \n\n";
+        "Longest Paragraph: " . $this->stats->longestParagraphLength . " :\n\n" . $this->stats->longestParagraph . " \n\n" .
+        "Shortest Paragraph: " . $this->stats->shortestParagraphLength . " :\n\n" .        $this->stats->shortestParagraph . " \n\n" .
+        "Longest Sentence: " . $this->stats->longestSentenceLength . " :\n\n" . $this->stats->longestSentence . " \n\n" .
+        "Shortest Sentence: " . $this->stats->shortestSentenceLength . " :\n\n" .        $this->stats->shortestSentence . " \n\n";
     }
 }
