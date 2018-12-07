@@ -122,28 +122,10 @@ class Stats
 
     public function getMostUsedWords()
     {
-        $filtered = $this->document->getWords()
-            ->map(function($value){
-                return strtolower($value);
+        return collect(freq_dist($this->document->getWords()->toArray())->getKeyValuesByFrequency())
+            ->reject(function($item) {
+                return $item < $this->numberWords * 0.01;
             })
-            ->sort()
-            ->reject(function($value) {
-                return collect($this->ignoredWords)->contains($value);
-            });
-        
-        $ranked = $filtered->flatMap(function($word) use ($filtered) {
-            $count = $filtered->filter(function($item) use ($word){
-                    return  $item == $word;
-                })->count();
-            return [$word => $count];
-        })
-        ->sort()
-        ->reverse()
-        ->reject(function($item) {
-            return $item < 2;
-        })
-        ->all();
-
-        return $ranked;
+            ->toArray();
     }
 }

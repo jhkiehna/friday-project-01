@@ -99,17 +99,27 @@ class StatsTest extends TestCase
         $this->assertEquals($this->statsObj->longestSentenceLength, 156);
     }
 
-    public function testCanReturnAListOfOverusedWordsAndTimesUsed()
+    public function testStatsCanReturnAListOfOverusedWordsAndTimesUsed()
     {
-        $path = realpath(__DIR__. '/../overused-words-fixture.txt');
-        $document = new Document($path);
-        $this->statsObj = new Stats($document);
-
         $rankArray = [
-            'this' => 3,
-            'test' => 3,
-            'do' => 2,
-            'because' =>2
+            "sit" => 35,
+            "amet" => 35,
+            "et" => 30,
+            "at" => 30,
+            "eu" => 29,
+            "vel" => 25,
+            "vitae" => 24,
+            "sed" => 24,
+            "Sed" => 24,
+            "nec" => 24,
+            "in" => 23,
+            "ut" => 21,
+            "dolor" => 21,
+            "non" => 21,
+            "id" => 20,
+            "eget" => 20,
+            "tincidunt" => 19,
+            "a" => 19,
         ];
         
         $this->assertEquals($rankArray, $this->statsObj->mostUsedWords);
