@@ -6,11 +6,18 @@ class Document
 {
     protected $filePath;
     protected $content;
+    protected $paragraphs;
+    protected $sentences;
+    protected $words;
 
     public function __construct($filePath)
     {
         $this->filePath = $filePath;
         $this->content = file_get_contents($filePath);
+
+        $this->setParagraphs();
+        $this->setSentences();
+        $this->setWords();
     }
 
     public function getContent()
@@ -18,50 +25,33 @@ class Document
         return $this->content;
     }
 
-    /********************* 
-     * Paragraphs *
-    **********************/
-
     public function getParagraphs()
     {
-        return collect(explode("\n", $this->content))
+        return $this->paragraphs;
+    }
+
+    public function getSentences()
+    {
+        return $this->sentences;
+    }
+
+    public function getWords()
+    {
+        return $this->words;
+    }
+
+    public function setParagraphs()
+    {
+        $this->paragraphs = collect(explode("\n", $this->content))
             ->filter(function ($paragraph) {
                 return empty(!$paragraph);
             })
             ->values();
     }
 
-    public function getShortestParagraph()
+    public function setSentences()
     {
-        //This will only return one paragraph. What to do in case of tie?
-        return $this->getParagraphs()->reduce(function ($shortestParagraph, $currentParagraph) {
-            if (empty($shortestParagraph) || (strlen($currentParagraph) <= strlen($shortestParagraph))) {
-                return $currentParagraph;
-            }
-
-            return $shortestParagraph;
-        });
-    }
-
-    public function getLongestParagraph()
-    {
-        //This will only return one paragraph. What to do in case of tie?
-        return $this->getParagraphs()->reduce(function ($longestParagraph, $currentParagraph) {
-            if (empty($longestParagraph) || (strlen($currentParagraph) >= strlen($longestParagraph))) {
-                return $currentParagraph;
-            }
-
-            return $longestParagraph;
-        });
-    }
-
-    /********************* 
-     * Sentences *
-    **********************/
-
-    public function getSentences()
-    {
-        return $this->getParagraphs()
+        $this->sentences =  $this->getParagraphs()
             ->flatMap(function ($paragraph) {
                 return collect(preg_split("/[.!?]+[\s]/", $paragraph));
             })
@@ -71,18 +61,9 @@ class Document
             ->values();
     }
 
-    public function getAverageSentencesPerParagraph()
+    public function setWords()
     {
-        return number_format($this->getSentences()->count() / $this->getParagraphs()->count(), 2);
-    }
-
-    /********************* 
-     * Words *
-    **********************/
-
-    public function getWords()
-    {
-        return $this->getSentences()
+        $this->words = $this->getSentences()
             ->flatMap(function ($sentence) {
                 return collect(preg_split("/\W/", $sentence));
             })
@@ -90,32 +71,5 @@ class Document
                 return empty(!$word);
             })
             ->values();
-    }
-
-    public function getAverageWordsPerParagraph()
-    {
-        return number_format($this->getWords()->count() / $this->getParagraphs()->count(), 2);
-    }
-
-    public function getAverageWordsPerSentence()
-    {
-        return number_format($this->getWords()->count() / $this->getSentences()->count(), 2);
-    }
-
-    /********************* 
-     * Characters *
-    **********************/
-
-    public function countCharacters()
-    {
-        //instead of doing a strlen on whole file. I didn't want newline characters counted.
-        return $this->getParagraphs()->reduce(function ($carryCharacters, $paragraph) {
-            return $carryCharacters + strlen($paragraph);
-        });
-    }
-
-    public function getAverageCharactersPerParagraph()
-    {
-        return number_format($this->countCharacters() / $this->getParagraphs()->count(), 2);
     }
 }
