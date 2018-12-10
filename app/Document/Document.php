@@ -8,6 +8,7 @@ use TextAnalysis\Tokenizers\SentenceTokenizer;
 use App\Document\Content;
 use App\Document\Paragraph;
 use App\Document\Sentence;
+use App\Document\Word;
 
 class Document
 {
@@ -16,7 +17,6 @@ class Document
     protected $content;
     protected $paragraphs;
     protected $sentences;
-
     protected $words;
 
     public function __construct($filePath)
@@ -26,8 +26,7 @@ class Document
         $this->content = new Content(file_get_contents($filePath));
         $this->paragraphs = new Paragraph($this->content);
         $this->sentences = new Sentence($this->content);
-
-        // $this->setWords();
+        $this->words = new Word($this->content);
     }
 
     public function getContent()
@@ -55,20 +54,18 @@ class Document
         return $this->sentences->getSentences($startOrNumber, $end);
     }
 
+    public function getWord($number)
+    {
+        return $this->words->getWord($number);
+    }
+
+    public function getWords($startOrNumber = null, $end = null)
+    {
+        return $this->words->getWords($startOrNumber, $end);
+    }
+
     public function getStats()
     {
         return new Stats($this);
     }
-
-    // public function getWords()
-    // {
-    //     return $this->words;
-    // }
-
-    // public function setWords()
-    // {
-    //     $this->words = collect(tokenize($this->content))->map(function($word) {
-    //         return preg_replace("#[[:punct:]]#", "", $word);
-    //     });
-    // }
 }
