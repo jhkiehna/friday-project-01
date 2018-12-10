@@ -25,6 +25,17 @@ class Word
         return $this->words->get($number);
     }
 
+    /**
+     * Undocumented function
+     *
+     * If it receives two paramaters, it takes words at index $x to $y
+     * if it receives on paramaters, it takes the first $x words
+     * If it receives no paramaters, it returns all words
+     * 
+     * @param [type] $startOrNumber
+     * @param [type] $end
+     * @return Collection
+     */
     public function getWords($startOrNumber = null, $end = null)
     {
         if (!empty($startOrNumber) && !empty($end)) {
