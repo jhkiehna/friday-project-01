@@ -30,6 +30,7 @@ class DocumentTest extends TestCase
 
     public function testDocumentHasSentences()
     {
+        dd($this->document->getSentences());
         $this->assertNotNull($this->document->getSentences());
     }
 

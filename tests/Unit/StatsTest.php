@@ -111,6 +111,8 @@ class StatsTest extends TestCase
             'was' => 21,
         ];
         
+        dd($this->statsObj->mostUsedWords);
+
         $this->assertEquals($rankArray, $this->statsObj->mostUsedWords);
     }
 
