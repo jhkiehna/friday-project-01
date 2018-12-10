@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Document;
+use App\Document\Document;
 
 class DocumentTest extends TestCase
 {
@@ -30,7 +30,6 @@ class DocumentTest extends TestCase
 
     public function testDocumentHasSentences()
     {
-        dd($this->document->getSentences());
         $this->assertNotNull($this->document->getSentences());
     }
 
