@@ -2,52 +2,44 @@
 
 namespace App\Document;
 
-use App\Document\Content;
+use App\Document\Sentence;
 
 class Paragraph
 {
-    protected $paragraphs;
+    public $content;
+    public $number;
 
-    public function __construct(Content $text)
+    public function __construct($content, $number = null)
     {
-        $this->paragraphs = $this->setParagraphs($text->getContent());
+        $this->content = $content;
+        $this->number = $number;
     }
 
-    private function setParagraphs($text)
+    public function get()
     {
-        return collect(explode("\n", $text))
+        return $this->paragraphs();
+    }
+
+    public function paragraphs()
+    {
+        $paragraphs = collect(explode("\n\n", $this->content))
             ->filter(function ($paragraph) {
                 return empty(!$paragraph);
             })
             ->values();
-    }
 
-    public function getParagraph($number)
-    {
-        return $this->paragraphs->get($number);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * If it receives two paramaters, it takes paragraps at index $x to $y
-     * if it receives on paramaters, it takes the first $x paragraphs
-     * If it receives no paramaters, it returns all paragraphs
-     * 
-     * @param [type] $startOrNumber
-     * @param [type] $end
-     * @return Collection
-     */
-    public function getParagraphs($startOrNumber = null, $end = null)
-    {
-        if (!empty($startOrNumber) && !empty($end)) {
-            return $this->paragraphs->slice($startOrNumber, $end);
+        
+        if ($this->number != null) {
+            return $paragraphs->get($this->number - 1);
         }
 
-        if (!empty($startOrNumber)) {
-            return $this->paragraphs->take($startOrNumber);
-        }
+        return $paragraphs;
+    }
 
-        return $this->paragraphs;
+    public function sentence($number = null)
+    {
+        $sentence = new Sentence($this->paragraphs($this->number), $number);
+
+        return $sentence;
     }
 }

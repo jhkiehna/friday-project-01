@@ -3,50 +3,41 @@
 namespace App\Document;
 
 use TextAnalysis\Tokenizers\SentenceTokenizer;
-use App\Document\Content;
+use App\Document\Word;
 
 class Sentence
 {
-    protected $sentences;
+    public $content;
+    public $number;
 
-    public function __construct(Content $text)
+    public function __construct($content, $number = null)
     {
-        $this->sentences = $this->setSentences($text->getContent());
+        $this->content = $content;
+        $this->number = $number;
     }
 
-    private function setSentences($text)
+    public function get()
+    {
+        return $this->sentences();
+    }
+
+    public function sentences()
     {
         $sentenceTokenizer = new SentenceTokenizer();
 
-        return collect($sentenceTokenizer->tokenize($text));
-    }
+        $sentences = collect($sentenceTokenizer->tokenize($this->content));
 
-    public function getSentence($number)
-    {
-        return $this->sentences->get($number);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * If it receives two paramaters, it takes sentences at index $x to $y
-     * if it receives on paramaters, it takes the first $x sentences
-     * If it receives no paramaters, it returns all sentences
-     * 
-     * @param [type] $startOrNumber
-     * @param [type] $end
-     * @return Collection
-     */
-    public function getSentences($startOrNumber = null, $end = null)
-    {
-        if (!empty($startOrNumber) && !empty($end)) {
-            return $this->sentences->slice($startOrNumber, $end);
+        if ($this->number != null) {
+            return $sentences->get($this->number - 1);
         }
 
-        if (!empty($startOrNumber)) {
-            return $this->sentences->take($startOrNumber);
-        }
+        return $sentences;
+    }
 
-        return $this->sentences;
+    public function word($number = null)
+    {
+        $word = new Word($this->sentences($this->number), $number);
+        
+        return $word;
     }
 }
