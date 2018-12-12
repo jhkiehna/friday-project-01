@@ -7,6 +7,7 @@ use App\Document;
 class Stats
 {
     private $document;
+    private $dictionary;
 
     public $numberParagraphs;
     public $numberSentences;
@@ -28,6 +29,8 @@ class Stats
     public $shortestSentence;
     public $shortestSentenceLength;
 
+    public $mostUsedWords;
+
     public function __construct(Document $document)
     {
         $this->document = $document;
@@ -37,6 +40,8 @@ class Stats
 
     private function initialize()
     {
+        $this->dictionary = pspell_new("en");
+
         $this->numberParagraphs     = $this->document->getParagraphs()->count();
         $this->numberSentences      = $this->document->getSentences()->count();
         $this->numberWords          = $this->document->getWords()->count();
@@ -56,6 +61,8 @@ class Stats
         $this->longestSentenceLength = strlen($this->longestSentence);
         $this->shortestSentence = $this->getShortest($this->document->getSentences());
         $this->shortestSentenceLength = strlen($this->shortestSentence);
+
+        $this->mostUsedWords = $this->getMostUsedWords();
     }
 
     private function countCharacters()
@@ -105,5 +112,24 @@ class Stats
 
             return $carry;
         });
+    }
+
+    public function getMostUsedWords()
+    {
+        return collect(freq_dist($this->document->getWords()->toArray())->getKeyValuesByFrequency())
+            ->reject(function($item) {
+                return $item < 20;
+            })
+            ->sort()
+            ->toArray();
+    }
+
+    public function mispellings()
+    {
+        return $this->document->getWords()->filter(function($word) {
+            return !pspell_check($this->dictionary, $word);
+        })
+        ->values()
+        ->toArray();
     }
 }

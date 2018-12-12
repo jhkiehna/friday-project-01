@@ -23,7 +23,7 @@ class Report
 
     private function writeStats()
     {
-        return "-----\n Stats \n-----\n" .
+        $output = "-----\n Stats \n-----\n" .
         "Number of Paragraphs: " .      $this->stats->numberParagraphs . " \n" .
         "Number of Sentences: " .       $this->stats->numberSentences . " \n" .
         "Number of Words: " .           $this->stats->numberWords . " \n" .
@@ -38,5 +38,27 @@ class Report
         "Shortest Paragraph: " . $this->stats->shortestParagraphLength . " :\n\n" .        $this->stats->shortestParagraph . " \n\n" .
         "Longest Sentence: " . $this->stats->longestSentenceLength . " :\n\n" . $this->stats->longestSentence . " \n\n" .
         "Shortest Sentence: " . $this->stats->shortestSentenceLength . " :\n\n" .        $this->stats->shortestSentence . " \n\n";
+
+        $misspellings = "Possible Misspellings: \n\n";
+
+        $num = $this->stats->mispellings();
+
+        for($i=0;$i<sizeof($num);$i++){
+            $misspellings .= $num[$i] . "\n";
+        }
+
+        $output .= $misspellings;
+
+        $mostUsed = "\nMost Used Words: \n\n";
+
+        $num = $this->stats->getMostUsedWords();
+
+        foreach($num as $key => $value){
+            $mostUsed .= $key . " - " . $value ."\n";
+        }
+
+        $output .= $mostUsed;
+
+        return $output;
     }
 }
